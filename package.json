@@ -1,0 +1,42 @@
+{
+  "name": "darts",
+  "version": "0.1.0",
+  "description": "Darts calculate app",
+  "main": "src/index.ts",
+  "repository": "git@github.com:hibikine/darts.git",
+  "author": "Hibikine Kage <goodsmile314159@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "next": "^9.0.5",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "react-redux": "^7.1.1",
+    "redux": "^4.0.4",
+    "redux-devtools-extension": "^2.13.8"
+  },
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "devDependencies": {
+    "@hibikine/eslint-config": "^1.0.0",
+    "@types/node": "^12.7.3",
+    "@types/react": "^16.9.2",
+    "@types/react-redux": "^7.1.2",
+    "@types/redux": "^3.6.0",
+    "@typescript-eslint/eslint-plugin": "^2.0.0",
+    "@typescript-eslint/parser": "^2.0.0",
+    "eslint": "^6.3.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-prettier": "^6.1.0",
+    "eslint-import-resolver-node": "^0.3.2",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-react": "^7.14.3",
+    "eslint-plugin-react-hooks": "^2.0.1",
+    "prettier": "^1.18.2",
+    "typescript": "^3.6.2"
+  }
+}

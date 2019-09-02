@@ -1,0 +1,14 @@
+{
+  "extends": ["@hibikine"],
+  "rules": {
+    "jsx-a11y/anchor-is-valid": "off"
+  },
+  "overrides": [
+    {
+      "files": ["pages/**/*.tsx"],
+      "rules": {
+        "react/react-in-jsx-scope": "off"
+      }
+    }
+  ]
+}
