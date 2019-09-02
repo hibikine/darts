@@ -12,6 +12,50 @@ const SectorPropsKeys: (keyof SectorProps)[] = [
   'start',
   'end',
 ];
+const OuterSectorPropsKeys: (keyof OuterSectorProps)[] = [
+  'cx',
+  'cy',
+  'innerR',
+  'outerR',
+  'start',
+  'end',
+];
+type OuterSectorProps = {
+  cx: number;
+  cy: number;
+  outerR: number;
+  innerR: number;
+  start: number;
+  end: number;
+};
+const OuterSector = (
+  props: React.SVGProps<SVGCircleElement> & OuterSectorProps
+) => {
+  const { cx, cy, outerR, innerR, start, end } = props;
+  const pathProps = (Object.keys(props).filter(
+    key => !OuterSectorPropsKeys.includes(key as any)
+  ) as (keyof React.SVGProps<SVGCircleElement>)[]).reduce((obj, key) => {
+    return {
+      ...obj,
+      [key]: props[key],
+    };
+  }, {});
+  const x1 = Math.cos(start) * outerR + cx;
+  const x2 = Math.cos(end) * outerR + cx;
+  const x3 = Math.cos(end) * innerR + cx;
+  const x4 = Math.cos(start) * innerR + cx;
+  const y1 = Math.sin(start) * outerR + cy;
+  const y2 = Math.sin(end) * outerR + cy;
+  const y3 = Math.sin(end) * innerR + cy;
+  const y4 = Math.sin(start) * innerR + cy;
+  return (
+    <path
+      /* eslint-disable-next-line react/jsx-props-no-spreading */
+      {...pathProps}
+      d={`M ${x4},${y4} L ${x1} ${y1} A ${outerR} ${outerR} ${start} 0 1 ${x2} ${y2} L ${x3} ${y3} A ${innerR} ${innerR} ${end} 0 0 ${x4} ${y4} z`}
+    />
+  );
+};
 const Sector = (props: React.SVGProps<SVGCircleElement> & SectorProps) => {
   const { cx, cy, r, start, end } = props;
   const pathProps = (Object.keys(props).filter(
@@ -24,15 +68,13 @@ const Sector = (props: React.SVGProps<SVGCircleElement> & SectorProps) => {
   }, {});
   const x1 = Math.cos(start) * r + cx;
   const x2 = Math.cos(end) * r + cx;
-  const dx = x2 - x1;
   const y1 = Math.sin(start) * r + cy;
   const y2 = Math.sin(end) * r + cy;
-  const dy = y2 - y1;
   return (
     <path
       /* eslint-disable-next-line react/jsx-props-no-spreading */
       {...pathProps}
-      d={`M ${cx},${cy} L ${x1} ${y1} a ${r} ${r} ${start} 0 1 ${dx} ${dy} z`}
+      d={`M ${cx},${cy} L ${x1} ${y1} A ${r} ${r} ${start} 0 1 ${x2} ${y2} z`}
     />
   );
 };
@@ -61,14 +103,16 @@ const DartBoard = () => {
   const width = 200;
   const boardR = (width - outlineStroke) / 2;
   const height = width;
+  const centerX = width / 2;
+  const centerY = height / 2;
   const outerBullR = (boardR * softDartBoardSize.outerBull) / 2 / boardR;
   const innerBullR = (boardR * softDartBoardSize.innerBull) / 2 / boardR;
   const lineArray = new Array(20).fill(0).map((_, i) => i);
   return (
     <svg viewBox={`0 0 ${width} ${height}`} xmlns="http://www.w3.org/2000/svg">
       <circle
-        cx={width / 2}
-        cy={height / 2}
+        cx={centerX}
+        cy={centerY}
         r={boardR}
         stroke="#000"
         strokeWidth={outlineStroke}
@@ -99,43 +143,47 @@ const DartBoard = () => {
         }
         return (
           <>
-            <Sector
+            <OuterSector
               key={n}
               fill={n % 2 === 0 ? 'red' : 'blue'}
               stroke="black"
-              cx={width / 2}
-              cy={height / 2}
-              r={outerR}
+              cx={centerX}
+              cy={centerY}
+              outerR={outerR}
+              innerR={doubleInnerR}
               start={theta}
               end={theta + (Math.PI / lineArray.length) * 2}
             />
-            <Sector
+            <OuterSector
               key={n}
               fill={n % 2 === 0 ? 'black' : 'white'}
               stroke="black"
-              cx={width / 2}
-              cy={height / 2}
-              r={doubleInnerR}
+              cx={centerX}
+              cy={centerY}
+              outerR={doubleInnerR}
+              innerR={tripleOuterR}
               start={theta}
               end={theta + (Math.PI / lineArray.length) * 2}
             />
-            <Sector
+            <OuterSector
               key={n}
               fill={n % 2 === 0 ? 'red' : 'blue'}
               stroke="black"
-              cx={width / 2}
-              cy={height / 2}
-              r={tripleOuterR}
+              cx={centerX}
+              cy={centerY}
+              outerR={tripleOuterR}
+              innerR={tripleInnerR}
               start={theta}
               end={theta + (Math.PI / lineArray.length) * 2}
             />
-            <Sector
+            <OuterSector
               key={n}
               fill={n % 2 === 0 ? 'black' : 'white'}
               stroke="black"
-              cx={width / 2}
-              cy={height / 2}
-              r={tripleInnerR}
+              cx={centerX}
+              cy={centerY}
+              outerR={tripleInnerR}
+              innerR={outerBullR}
               start={theta}
               end={theta + (Math.PI / lineArray.length) * 2}
             />
